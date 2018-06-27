@@ -22,8 +22,6 @@ public class SudokuStream {
 
 	public static int[] solveIt(int[] master, int forcePosition, int forceValue) {
 
-	
-
 		if (forcePosition != 0) {
 			master[forcePosition] = forceValue;
 		}
@@ -52,18 +50,17 @@ public class SudokuStream {
 			iterations++;
 			// keyCheck();
 			System.out.println();
-			System.out.println("Before: " + beforeSolved);
+			System.out.println("Iterations: " + iterations);
 			System.out.println("Number solved: " + numberSolved(masteranswer));
 
 			if (beforeSolved == numberSolved(masteranswer)) {
-				 int[] y = new int[82];
-				 for (int i = 1; i < 82; i++)
-				 {
-				 y[i] = masteranswer[i];
-				 }
-				
-				 globalKey.add(y);
-				 keyCount = globalKey.size() -1;
+				int[] y = new int[82];
+				for (int i = 1; i < 82; i++) {
+					y[i] = masteranswer[i];
+				}
+
+				globalKey.add(y);
+				keyCount = globalKey.size() - 1;
 
 				if (mathCheck(y)) {
 					return y;
@@ -74,21 +71,19 @@ public class SudokuStream {
 
 					List<Integer> possibleValues = getPossibleValues(masteranswer);
 					int nextEmpty = possibleValues.get(0);
-				//	System.out.println(keyCount);
-				//	System.out.println(possibleValues);
+					// System.out.println(keyCount);
+					// System.out.println(possibleValues);
 					int[] sandbox = globalKey.get(keyCount);
 
 					int[] subGame = new int[82];
 					for (int i = 1; i < possibleValues.size(); i++) {
-					
+
 						subGame = solveIt(sandbox, nextEmpty, possibleValues.get(i));
 						if (mathCheck(subGame)) {
 							return subGame;
 						}
-						
-						
+
 					}
-					
 
 				}
 
@@ -97,7 +92,8 @@ public class SudokuStream {
 		}
 
 	}
-	public static void solve(int i){
+
+	public static void solve(int i) {
 		checkColL2();
 		checkRowL2();
 		checkSquareL2();
@@ -106,7 +102,6 @@ public class SudokuStream {
 		checkRow(i);
 		checkSquare(i);
 
-		
 	}
 
 	public static int[] toArray(int position) {
@@ -295,6 +290,23 @@ public class SudokuStream {
 
 		}
 
+	}
+
+	public static void getFailedRow(int[] master) {
+		int total;
+
+		// verify row
+		for (int i = 0; i < 9; i++) {
+			total = 0;
+			for (int j = 0; j < 9; j++) {
+				total += master[getPosition(i, j)];
+			}
+			if (total != 45) {
+				System.out.printf("%nRow %d failed math verification..%n", i);
+
+			}
+
+		}
 	}
 
 	public static boolean mathCheck(int[] master) {

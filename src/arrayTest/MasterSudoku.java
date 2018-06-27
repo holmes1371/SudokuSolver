@@ -18,11 +18,12 @@ public class MasterSudoku {
 		{
 			System.out.printf("%n%nPuzzle solved in %d iterations.", SudokuStream.iterations -1);
 		}else{
-			System.out.printf("%n%nAfter %d iterations, no solution was found.", SudokuStream.iterations -1);
+			System.out.printf("%n%nAfter %d iterations no solution was found.%n", SudokuStream.iterations -1);
+			SudokuStream.getFailedRow(localMaster);
 		}
 		
 		System.out.println();
-		System.out.println("Took "+((endTime - startTime)/1000000) + " ms"); 
+		System.out.println("Time elapsed: "+((endTime - startTime)/1000000) + " ms"); 
 		System.exit(0);
 	}
 	
