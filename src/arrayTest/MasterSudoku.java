@@ -6,9 +6,9 @@ public class MasterSudoku {
 
 	public static void main(String[] args) {
 		
-		long startTime = System.nanoTime();	
-		int[] localMaster = initLocalMaster();
 		
+		int[] localMaster = initLocalMaster();
+		long startTime = System.nanoTime();	
 		
 		localMaster = SudokuStream.solveIt(localMaster, 0, 0);
 		long endTime = System.nanoTime();
@@ -16,14 +16,19 @@ public class MasterSudoku {
 		
 		if (SudokuStream.mathCheck(localMaster))
 		{
-			System.out.printf("%n%nPuzzle solved in %d iterations.", SudokuStream.iterations);
+			System.out.printf("%n%nPuzzle solved in %d iterations.", SudokuStream.iterations -1);
 		}else{
-			System.out.printf("%n%nAfter %d iterations no solution was found.%n", SudokuStream.iterations);
+			System.out.printf("%n%nAfter %d iterations no solution was found.%n", SudokuStream.iterations -1);
 			SudokuStream.getFailedRow(localMaster);
 		}
 		
 		System.out.println();
-		System.out.println("Time elapsed: "+((endTime - startTime)/1000000) + " ms"); 
+		long elapsedMS = (endTime - startTime)/1000000;
+				
+		if (elapsedMS < 60000) System.out.println("Time elapsed: "+ elapsedMS + " ms");
+			
+		if (elapsedMS >= 60000) System.out.println("Time elapsed: "+ elapsedMS / 60000 + " minutes"); 
+	
 		System.exit(0);
 	}
 	
