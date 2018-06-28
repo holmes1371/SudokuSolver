@@ -76,7 +76,7 @@ public class SudokuStream {
 					int[] subGame = new int[82];
 					double tossup = Math.random();
 
-					if (tossup > .5) {
+//					if (tossup > .5) {
 						for (int i = 1; i < possibleValues.size(); i++) {
 
 							subGame = solveIt(sandbox, nextEmpty, possibleValues.get(i));
@@ -85,17 +85,17 @@ public class SudokuStream {
 							}
 
 						}
-					}else{
-						for (int i = possibleValues.size() -1; i > 0; i--) {
-
-							subGame = solveIt(sandbox, nextEmpty, possibleValues.get(i));
-							if (mathCheck(subGame)) {
-								return subGame;
-							}
-
-						}
-						
-					}
+//					}else{
+//						for (int i = possibleValues.size() -1; i > 0; i--) {
+//
+//							subGame = solveIt(sandbox, nextEmpty, possibleValues.get(i));
+//							if (mathCheck(subGame)) {
+//								return subGame;
+//							}
+//
+//						}
+//						
+//					}
 
 				}
 
@@ -110,9 +110,9 @@ public class SudokuStream {
 		refreshGrid(masteranswer);
 		int nextZero = 0;
 		int[] fromGrid = new int[9];
-//		double tossup = Math.random();
+		double tossup = Math.random();
 
-//		if (tossup > .5) {
+		if (tossup > .5) {
 			while (true) {
 				for (int i = 1; i < 82; i++) {
 					if (masteranswer[i] == 0) {
@@ -122,18 +122,18 @@ public class SudokuStream {
 				}
 				break;
 			}
-//		} else {
-//			while (true) {
-//				for (int i = 81; i > 0; i--) {
-//					if (masteranswer[i] == 0) {
-//						nextZero = i;
-//						break;
-//					}
-//				}
-//				break;
-//			}
-//
-//		}
+		} else {
+			while (true) {
+				for (int i = 81; i > 0; i--) {
+					if (masteranswer[i] == 0) {
+						nextZero = i;
+						break;
+					}
+				}
+				break;
+			}
+
+		}
 
 		fromGrid = getValues(nextZero);
 		if (isBlank(fromGrid)) {
