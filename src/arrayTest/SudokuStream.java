@@ -65,11 +65,13 @@ public class SudokuStream {
 				if (mathCheck(y)) {
 					return y;
 				}
-				if (numberSolved(y) == 81 && !mathCheck(y)) {
+//			 if (numberSolved(y) == 81 && !mathCheck(y)) {
+//					return y;
+				List<Integer> possibleValues = getPossibleValues(masteranswer);
+				if (possibleValues.isEmpty()) {
 					return globalKey.get(keyCount);
 				} else {
-
-					List<Integer> possibleValues = getPossibleValues(masteranswer);
+//					List<Integer> possibleValues = getPossibleValues(masteranswer);
 					int nextEmpty = possibleValues.get(0);
 					// System.out.println(keyCount);
 					// System.out.println(possibleValues);
@@ -93,6 +95,38 @@ public class SudokuStream {
 
 	}
 
+	public static List<Integer> getPossibleValues(int[] masteranswer) {
+		List<Integer> returnValues = new ArrayList<>();
+	
+		int nextZero = 0;
+		int[] fromGrid = new int[9];
+	
+		while (true) {
+			for (int i = 1; i < 82; i++) {
+				if (masteranswer[i] == 0) {
+					nextZero = i;
+					break;
+				}
+			}
+			break;
+		}
+	
+		fromGrid = getValues(nextZero);
+		if (isBlank(fromGrid)) {
+			returnValues.clear();
+			return returnValues;
+		} else {
+			returnValues.add(nextZero);
+			for (int j = 0; j < 9; j++) {
+				if (fromGrid[j] != 0) {
+					returnValues.add(fromGrid[j]);
+				}
+			}
+	
+			return returnValues;
+		}
+	}
+
 	public static void solve(int i) {
 		checkColL2();
 		checkRowL2();
@@ -105,7 +139,7 @@ public class SudokuStream {
 	}
 
 	public static int[] toArray(int position) {
-		//method to convert an array stored in the list back to an int[]. 
+		// method to convert an array stored in the list back to an int[].
 		int[] passback = globalKey.get(position);
 		int[] readback = new int[82];
 		int count = 0;
@@ -123,33 +157,6 @@ public class SudokuStream {
 			returnTemp[i] = x[i + 1];
 		}
 		return returnTemp;
-	}
-
-	public static List<Integer> getPossibleValues(int[] masteranswer) {
-		List<Integer> returnValues = new ArrayList<>();
-
-		int nextZero = 0;
-		int[] fromGrid = new int[9];
-
-		while (true) {
-			for (int i = 1; i < 82; i++) {
-				if (masteranswer[i] == 0) {
-					nextZero = i;
-					break;
-				}
-			}
-			break;
-		}
-
-		fromGrid = getValues(nextZero);
-		returnValues.add(nextZero);
-		for (int j = 0; j < 9; j++) {
-			if (fromGrid[j] != 0) {
-				returnValues.add(fromGrid[j]);
-			}
-		}
-
-		return returnValues;
 	}
 
 	public static int numberSolved(int[] keycheck) {
@@ -486,7 +493,8 @@ public class SudokuStream {
 	}
 
 	public static boolean isBlank(int[] x) {
-		// checks a position to see if it is blank on the main grid. i.e. no
+		// checks a position to see if it is blank on the main grid. i.e. no (or
+		// all)
 		// possibilities have been eliminated
 		int count = 0;
 		for (int i = 0; i < 9; i++) {
