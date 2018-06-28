@@ -10,7 +10,7 @@ public class SudokuStream {
 	public static int[] masteranswer = new int[82];
 	public static int[] localMasterAnswer = new int[82];
 	public static int[] boxPosition = new int[6];
-	public static int iterations = 1;
+	public static int iterations = 0;
 	public static List<Integer> rowMaster = new ArrayList<>();
 	public static List<Integer> colMaster = new ArrayList<>();
 	public static List<Integer> squareMaster = new ArrayList<>();
@@ -31,9 +31,6 @@ public class SudokuStream {
 
 		refreshMaster();
 
-		// printGrid();
-
-		// keyCheck();
 		while (true) {
 
 			int beforeSolved = numberSolved(masteranswer);
@@ -45,10 +42,9 @@ public class SudokuStream {
 			}
 
 			refreshMaster();
-
 			printGrid();
 			iterations++;
-			// keyCheck();
+
 			System.out.println();
 			System.out.println("Iterations: " + iterations);
 			System.out.println("Number solved: " + numberSolved(masteranswer));
@@ -65,16 +61,16 @@ public class SudokuStream {
 				if (mathCheck(y)) {
 					return y;
 				}
-//			 if (numberSolved(y) == 81 && !mathCheck(y)) {
-//					return y;
+				if (numberSolved(y) == 81 && !mathCheck(y)) {
+					return y;
+				}
 				List<Integer> possibleValues = getPossibleValues(masteranswer);
 				if (possibleValues.isEmpty()) {
 					return globalKey.get(keyCount);
 				} else {
-//					List<Integer> possibleValues = getPossibleValues(masteranswer);
+
 					int nextEmpty = possibleValues.get(0);
-					// System.out.println(keyCount);
-					// System.out.println(possibleValues);
+
 					int[] sandbox = globalKey.get(keyCount);
 
 					int[] subGame = new int[82];
@@ -97,20 +93,34 @@ public class SudokuStream {
 
 	public static List<Integer> getPossibleValues(int[] masteranswer) {
 		List<Integer> returnValues = new ArrayList<>();
-	
+		refreshGrid(masteranswer);
 		int nextZero = 0;
 		int[] fromGrid = new int[9];
-	
-		while (true) {
-			for (int i = 1; i < 82; i++) {
-				if (masteranswer[i] == 0) {
-					nextZero = i;
-					break;
+		double tossup = Math.random();
+
+		if (tossup > .5) {
+			while (true) {
+				for (int i = 1; i < 82; i++) {
+					if (masteranswer[i] == 0) {
+						nextZero = i;
+						break;
+					}
 				}
+				break;
 			}
-			break;
+		} else {
+			while (true) {
+				for (int i = 81; i > 0; i--) {
+					if (masteranswer[i] == 0) {
+						nextZero = i;
+						break;
+					}
+				}
+				break;
+			}
+
 		}
-	
+
 		fromGrid = getValues(nextZero);
 		if (isBlank(fromGrid)) {
 			returnValues.clear();
@@ -121,9 +131,21 @@ public class SudokuStream {
 				if (fromGrid[j] != 0) {
 					returnValues.add(fromGrid[j]);
 				}
+
 			}
-	
+
 			return returnValues;
+		}
+	}
+
+	public static void refreshGrid(int[] master) {
+		for (int i = 1; i < 82; i++) {
+			if (master[i] != 0) {
+				int[] values = new int[9];
+				values[master[i] - 1] = master[i];
+				setValues(values, i);
+			}
+
 		}
 	}
 
@@ -167,37 +189,6 @@ public class SudokuStream {
 		}
 		return count;
 
-	}
-
-	public static void secondChance() {
-		// attempts to reset values of unresolved positions.
-		int[] coords = new int[2];
-		for (int i = 0; i < 82; i++) {
-			if (masteranswer[i] == 0) {
-				coords = getCoordinates(i);
-				for (int j = 0; j < 9; j++) {
-					grid[coords[0]][coords[1]][j] = j + 1;
-				}
-			}
-
-		}
-
-	}
-
-	public static void keyCheck() {
-		// imports answer key for verification.
-		int[] answerKey = FileImporter.readFile("answerKey.csv");
-
-		List<Integer> wrongAnswers = new ArrayList<>();
-
-		for (int i = 0; i < 81; i++) {
-			if (masteranswer[i + 1] != answerKey[i]) {
-				wrongAnswers.add(i + 1);
-			}
-		}
-
-		System.out.println(wrongAnswers);
-		System.out.printf("Unsolved: %d%n", wrongAnswers.size());
 	}
 
 	public static void checkSquare(int position) {
@@ -597,17 +588,6 @@ public class SudokuStream {
 
 		}
 
-	}
-
-	public static void refreshGrid(int[] master) {
-		for (int i = 1; i < 82; i++) {
-			if (master[i] != 0) {
-				int[] values = new int[9];
-				values[master[i] - 1] = master[i];
-				setValues(values, i);
-			}
-
-		}
 	}
 
 	public static void printGrid() {
