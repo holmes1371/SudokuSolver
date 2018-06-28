@@ -27,7 +27,12 @@ public class MasterSudoku {
 				
 		if (elapsedMS < 60000) System.out.println("Time elapsed: "+ elapsedMS + " ms");
 			
-		if (elapsedMS >= 60000) System.out.println("Time elapsed: "+ elapsedMS / 60000 + " minutes"); 
+		if (elapsedMS >= 60000) 
+			{
+				//long l = elapsedMS / 60000;
+				double number = (double)elapsedMS / (double)60000; 
+				System.out.printf("%nTime elapsed: %.2f minutes.", number); 
+			}
 	
 		System.exit(0);
 	}
