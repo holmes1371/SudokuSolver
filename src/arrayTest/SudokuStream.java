@@ -105,6 +105,7 @@ public class SudokuStream {
 	}
 
 	public static int[] toArray(int position) {
+		//method to convert an array stored in the list back to an int[]. 
 		int[] passback = globalKey.get(position);
 		int[] readback = new int[82];
 		int count = 0;

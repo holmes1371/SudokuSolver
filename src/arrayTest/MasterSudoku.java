@@ -16,9 +16,9 @@ public class MasterSudoku {
 		
 		if (SudokuStream.mathCheck(localMaster))
 		{
-			System.out.printf("%n%nPuzzle solved in %d iterations.", SudokuStream.iterations -1);
+			System.out.printf("%n%nPuzzle solved in %d iterations.", SudokuStream.iterations);
 		}else{
-			System.out.printf("%n%nAfter %d iterations no solution was found.%n", SudokuStream.iterations -1);
+			System.out.printf("%n%nAfter %d iterations no solution was found.%n", SudokuStream.iterations);
 			SudokuStream.getFailedRow(localMaster);
 		}
 		
