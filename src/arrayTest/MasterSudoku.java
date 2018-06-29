@@ -1,6 +1,5 @@
 package arrayTest;
-//import java.util.ArrayList;
-//import java.util.List;
+
 
 public class MasterSudoku {
 
@@ -80,7 +79,7 @@ public class MasterSudoku {
 				
 				double number = (double)elapsedMS / (double)60000; 
 				double seconds = (number - Math.floor(number)) * 60;
-				if (seconds < 9.5) {
+				if (seconds <= 9.5) {
 					System.out.printf("Time elapsed: %.0f:0%.0f minutes", number, seconds);
 				} else {
 					System.out.printf("Time elapsed: %.0f:%.0f minutes", number, seconds);
