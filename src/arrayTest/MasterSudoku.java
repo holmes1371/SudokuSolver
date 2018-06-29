@@ -4,11 +4,12 @@ package arrayTest;
 
 public class MasterSudoku {
 
+	public static long startTime = System.nanoTime();	
 	public static void main(String[] args) {
 		
 		
 		int[] localMaster = initLocalMaster();
-		long startTime = System.nanoTime();	
+		
 		
 		localMaster = SudokuStream.solveIt(localMaster, 0, 0);
 		long endTime = System.nanoTime();
@@ -23,16 +24,8 @@ public class MasterSudoku {
 		}
 		
 		System.out.println();
-		long elapsedMS = (endTime - startTime)/1000000;
-				
-		if (elapsedMS < 60000) System.out.println("Time elapsed: "+ elapsedMS + " ms");
-			
-		if (elapsedMS >= 60000) 
-			{
-				//long l = elapsedMS / 60000;
-				double number = (double)elapsedMS / (double)60000; 
-				System.out.printf("%nTime elapsed: %.2f minutes.", number); 
-			}
+		printElapsedTime(endTime);
+		
 	
 		System.exit(0);
 	}
@@ -66,5 +59,32 @@ public class MasterSudoku {
 				position++;
 			}
 		}
+	}
+	
+	public static void printElapsedTime(long endTime)
+	{
+		long elapsedMS = (endTime - startTime)/1000000;
+		
+		if (elapsedMS < 1000) System.out.println("Time elapsed: "+ elapsedMS + " ms");
+		
+		if (elapsedMS >= 1000 && elapsedMS < 60000) {
+			//long l = (System.nanoTime() - MasterSudoku.startTime) / 1000000;
+
+			double number = (double) elapsedMS / (double) 1000;
+
+			System.out.printf("Time elapsed: %.3f seconds %n", number);
+		}
+			
+		if (elapsedMS >= 60000) 
+			{
+				
+				double number = (double)elapsedMS / (double)60000; 
+				double seconds = (number - Math.floor(number)) * 60;
+				if (seconds < 10) {
+					System.out.printf("Time elapsed: %.0f:0%.0f minutes", number, seconds);
+				} else {
+					System.out.printf("Time elapsed: %.0f:%.0f minutes", number, seconds);
+				}
+			}
 	}
 }
