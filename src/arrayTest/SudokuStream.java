@@ -1176,7 +1176,7 @@ public class SudokuStream {
 
 			double number = (double) l / (double) 60000;
 			double seconds = (number - Math.floor(number)) * 60;
-			if (seconds < 10) {
+			if (seconds < 9.5) {
 				System.out.printf("Time elapsed: %.0f:0%.0f minutes%n", number, seconds);
 			} else {
 				System.out.printf("Time elapsed: %.0f:%.0f minutes%n", number, seconds);
