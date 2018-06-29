@@ -42,12 +42,15 @@ public class SudokuStream {
 			}
 
 			refreshMaster();
+
 			printGrid();
 			iterations++;
 
 			System.out.println();
+
 			System.out.println("Iterations: " + iterations);
 			System.out.println("Number solved: " + numberSolved(masteranswer));
+			printElapsedTime();
 
 			if (beforeSolved == numberSolved(masteranswer)) {
 				int[] y = new int[82];
@@ -74,28 +77,29 @@ public class SudokuStream {
 					int[] sandbox = globalKey.get(keyCount);
 
 					int[] subGame = new int[82];
-					double tossup = Math.random();
+					// double tossup = Math.random();
 
-//					if (tossup > .5) {
-						for (int i = 1; i < possibleValues.size(); i++) {
+					// if (tossup > .5) {
+					for (int i = 1; i < possibleValues.size(); i++) {
 
-							subGame = solveIt(sandbox, nextEmpty, possibleValues.get(i));
-							if (mathCheck(subGame)) {
-								return subGame;
-							}
-
+						subGame = solveIt(sandbox, nextEmpty, possibleValues.get(i));
+						if (mathCheck(subGame)) {
+							return subGame;
 						}
-//					}else{
-//						for (int i = possibleValues.size() -1; i > 0; i--) {
-//
-//							subGame = solveIt(sandbox, nextEmpty, possibleValues.get(i));
-//							if (mathCheck(subGame)) {
-//								return subGame;
-//							}
-//
-//						}
-//						
-//					}
+
+					}
+					// }else{
+					// for (int i = possibleValues.size() -1; i > 0; i--) {
+					//
+					// subGame = solveIt(sandbox, nextEmpty,
+					// possibleValues.get(i));
+					// if (mathCheck(subGame)) {
+					// return subGame;
+					// }
+					//
+					// }
+					//
+					// }
 
 				}
 
@@ -609,7 +613,7 @@ public class SudokuStream {
 		// unresolved (i.e. a value has not been committed to the masteranswer
 		// array for that position)
 		System.out.printf("%n%n\t0\t1\t2\t3\t4\t5\t6\t7\t8%n");
-		System.out.println("------------------------------------------------------------------------------");
+		System.out.println("----------------------------------------------------------------------------");
 		int position = 1;
 		for (int i = 0; i < 9; i++) {
 			System.out.printf("%n%d   |", i);
@@ -1152,6 +1156,33 @@ public class SudokuStream {
 			}
 
 		}
+	}
+	
+	public static void printElapsedTime()
+	{
+		if ((System.nanoTime() - MasterSudoku.startTime) / 1000000 < 1000)
+			System.out.println("Time elapsed: " + (System.nanoTime() - MasterSudoku.startTime) / 1000000 + " ms");
+
+		if ((System.nanoTime() - MasterSudoku.startTime) / 1000000 >= 1000
+				&& (System.nanoTime() - MasterSudoku.startTime) / 1000000 < 60000) {
+			long l = (System.nanoTime() - MasterSudoku.startTime) / 1000000;
+
+			double number = (double) l / (double) 1000;
+
+			System.out.printf("Time elapsed: %.3f seconds %n", number);
+		}
+		if ((System.nanoTime() - MasterSudoku.startTime) / 1000000 >= 60000) {
+			long l = (System.nanoTime() - MasterSudoku.startTime) / 1000000;
+
+			double number = (double) l / (double) 60000;
+			double seconds = (number - Math.floor(number)) * 60;
+			if (seconds < 10) {
+				System.out.printf("Time elapsed: %.0f:0%.0f minutes%n", number, seconds);
+			} else {
+				System.out.printf("Time elapsed: %.0f:%.0f minutes%n", number, seconds);
+			}
+		}
+		
 	}
 
 }
