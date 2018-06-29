@@ -5,20 +5,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SudokuStream {
-	public static List<int[]> globalKey = new ArrayList<int[]>();
-	public static int[][][] grid = new int[9][9][9];
-	public static int[] masteranswer = new int[82];
-	public static int[] localMasterAnswer = new int[82];
-	public static int[] boxPosition = new int[6];
+	private static List<int[]> globalKey = new ArrayList<int[]>();
+	private static int[][][] grid = new int[9][9][9];
+	private static int[] masteranswer = new int[82];
+	private static int[] boxPosition = new int[6];
 	public static int iterations = 0;
-	public static List<Integer> rowMaster = new ArrayList<>();
-	public static List<Integer> colMaster = new ArrayList<>();
-	public static List<Integer> squareMaster = new ArrayList<>();
-	public static List<Integer> eliminatedPositions = new ArrayList<>();
-	public static List<Integer> eliminatedSolutions = new ArrayList<>();
-	public static List<Integer> possiblePositions = new ArrayList<>();
-	public static int[] squareDesignations = { 11, 14, 17, 38, 41, 44, 65, 68, 80 };
-	public static int keyCount = 0;
+	private static List<Integer> rowMaster = new ArrayList<>();
+	private static List<Integer> colMaster = new ArrayList<>();
+	private static List<Integer> squareMaster = new ArrayList<>();
+	private static List<Integer> eliminatedPositions = new ArrayList<>();
+	private static int[] squareDesignations = { 11, 14, 17, 38, 41, 44, 65, 68, 80 };
+	private static int keyCount = 0;
 
 	public static int[] solveIt(int[] master, int forcePosition, int forceValue) {
 
@@ -49,8 +46,9 @@ public class SudokuStream {
 			System.out.println();
 
 			System.out.println("Iterations: " + iterations);
-			System.out.println("Number solved: " + numberSolved(masteranswer));
+	//		System.out.println("Number solved: " + numberSolved(masteranswer));
 			printElapsedTime();
+			System.out.println();
 
 			if (beforeSolved == numberSolved(masteranswer)) {
 				int[] y = new int[82];
@@ -1176,7 +1174,7 @@ public class SudokuStream {
 
 			double number = (double) l / (double) 60000;
 			double seconds = (number - Math.floor(number)) * 60;
-			if (seconds < 9.5) {
+			if (seconds <= 9.5) {
 				System.out.printf("Time elapsed: %.0f:0%.0f minutes%n", number, seconds);
 			} else {
 				System.out.printf("Time elapsed: %.0f:%.0f minutes%n", number, seconds);
