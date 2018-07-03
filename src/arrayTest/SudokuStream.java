@@ -594,7 +594,7 @@ public class SudokuStream {
 	}
 
 	public static void printGrid() {
-		// prints the current state of the grid. Will show 0 if the position is
+		// prints the current state of the grid. Will show _ if the position is
 		// unresolved (i.e. a value has not been committed to the masteranswer
 		// array for that position)
 		System.out.printf("%n%n\t0\t1\t2\t3\t4\t5\t6\t7\t8%n");
