@@ -1,6 +1,5 @@
 package arrayTest;
 
-//import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,7 +45,8 @@ public class SudokuStream {
 			System.out.println();
 
 			System.out.println("Iterations: " + iterations);
-	//		System.out.println("Number solved: " + numberSolved(masteranswer));
+			// System.out.println("Number solved: " +
+			// numberSolved(masteranswer));
 			printElapsedTime();
 			System.out.println();
 
@@ -75,9 +75,8 @@ public class SudokuStream {
 					int[] sandbox = globalKey.get(keyCount);
 
 					int[] subGame = new int[82];
-					// double tossup = Math.random();
-
-					// if (tossup > .5) {
+					
+					// REAL STUFF STARTS HERE:
 					for (int i = 1; i < possibleValues.size(); i++) {
 
 						subGame = solveIt(sandbox, nextEmpty, possibleValues.get(i));
@@ -86,18 +85,6 @@ public class SudokuStream {
 						}
 
 					}
-					// }else{
-					// for (int i = possibleValues.size() -1; i > 0; i--) {
-					//
-					// subGame = solveIt(sandbox, nextEmpty,
-					// possibleValues.get(i));
-					// if (mathCheck(subGame)) {
-					// return subGame;
-					// }
-					//
-					// }
-					//
-					// }
 
 				}
 
@@ -616,8 +603,13 @@ public class SudokuStream {
 		for (int i = 0; i < 9; i++) {
 			System.out.printf("%n%d   |", i);
 			for (int j = 0; j < 9; j++) {
-				System.out.printf("\t%d", masteranswer[position]);
-				position++;
+				if (masteranswer[position] == 0) {
+					System.out.printf("\t_");
+					position++;
+				} else {
+					System.out.printf("\t%d", masteranswer[position]);
+					position++;
+				}
 			}
 		}
 	}
@@ -1155,9 +1147,8 @@ public class SudokuStream {
 
 		}
 	}
-	
-	public static void printElapsedTime()
-	{
+
+	public static void printElapsedTime() {
 		if ((System.nanoTime() - MasterSudoku.startTime) / 1000000 < 1000)
 			System.out.println("Time elapsed: " + (System.nanoTime() - MasterSudoku.startTime) / 1000000 + " ms");
 
@@ -1180,7 +1171,7 @@ public class SudokuStream {
 				System.out.printf("Time elapsed: %.0f:%.0f minutes%n", number, seconds);
 			}
 		}
-		
+
 	}
 
 }
