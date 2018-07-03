@@ -31,11 +31,7 @@ public class SudokuStream {
 
 			int beforeSolved = numberSolved(masteranswer);
 
-			for (int i = 1; i < 82; i++) {
-
-				solve(i);
-
-			}
+			solve();
 
 			refreshMaster();
 
@@ -45,8 +41,7 @@ public class SudokuStream {
 			System.out.println();
 
 			System.out.println("Iterations: " + iterations);
-			// System.out.println("Number solved: " +
-			// numberSolved(masteranswer));
+
 			printElapsedTime();
 			System.out.println();
 
@@ -75,7 +70,7 @@ public class SudokuStream {
 					int[] sandbox = globalKey.get(keyCount);
 
 					int[] subGame = new int[82];
-					
+
 					// REAL STUFF STARTS HERE:
 					for (int i = 1; i < possibleValues.size(); i++) {
 
@@ -152,14 +147,14 @@ public class SudokuStream {
 		}
 	}
 
-	public static void solve(int i) {
+	public static void solve() {
 		checkColL2();
 		checkRowL2();
 		checkSquareL2();
 		refreshGrid(masteranswer);
-		checkColumn(i);
-		checkRow(i);
-		checkSquare(i);
+		checkColumn();
+		checkRow();
+		checkSquare();
 
 	}
 
@@ -194,104 +189,109 @@ public class SudokuStream {
 
 	}
 
-	public static void checkSquare(int position) {
+	public static void checkSquare() {
 		// checks the surrounding square for the position.
-		int[] gridValues = new int[9];
-		int[] positionValues = getValues(position);
-		int[] coordinates = new int[2];
-		coordinates = getCoordinates(position);
+		for (int position = 1; position < 82; position++) {
+			int[] gridValues = new int[9];
+			int[] positionValues = getValues(position);
+			int[] coordinates = new int[2];
+			coordinates = getCoordinates(position);
 
-		getBoxRow(coordinates[0]);
-		getBoxCol(coordinates[1]);
+			getBoxRow(coordinates[0]);
+			getBoxCol(coordinates[1]);
 
-		for (int i = 0; i < 3; i++) {
-			for (int j = 3; j < 6; j++) {
-				if (isSame(i, j, position) == false) {
-					gridValues = getGridValues(boxPosition[i], boxPosition[j]);
-					if (isBlank(gridValues) == false) {
-						compareValues(positionValues, boxPosition[i], boxPosition[j]);
+			for (int i = 0; i < 3; i++) {
+				for (int j = 3; j < 6; j++) {
+					if (isSame(i, j, position) == false) {
+						gridValues = getGridValues(boxPosition[i], boxPosition[j]);
+						if (isBlank(gridValues) == false) {
+							compareValues(positionValues, boxPosition[i], boxPosition[j]);
+						}
+					}
+
+				}
+
+			}
+
+			if (isEmpty(positionValues) == false) {
+				if (finalVerify(positionValues, position) == true) {
+					setValues(positionValues, position);
+					if (isFinal(positionValues) == true) {
+						setMaster(positionValues, position);
 					}
 				}
 
 			}
 
 		}
-
-		if (isEmpty(positionValues) == false) {
-			if (finalVerify(positionValues, position) == true) {
-				setValues(positionValues, position);
-				if (isFinal(positionValues) == true) {
-					setMaster(positionValues, position);
-				}
-			}
-
-		}
-
 	}
 
-	public static void checkRow(int position) {
+	public static void checkRow() {
 		// checks the row of the values
-		int[] gridValues = new int[9];
-		int[] positionValues = getValues(position);
-		int[] coordinates = new int[2];
-		coordinates = getCoordinates(position);
-		int positionColumn = coordinates[1];
+		for (int position = 1; position < 82; position++) {
+			int[] gridValues = new int[9];
+			int[] positionValues = getValues(position);
+			int[] coordinates = new int[2];
+			coordinates = getCoordinates(position);
+			int positionColumn = coordinates[1];
 
-		for (int i = 0; i < 9; i++) {
-			if (i != positionColumn) {
-				gridValues = getGridValues(coordinates[0], i);
+			for (int i = 0; i < 9; i++) {
+				if (i != positionColumn) {
+					gridValues = getGridValues(coordinates[0], i);
 
-				if (isBlank(gridValues) == false) {
-					compareValues(positionValues, coordinates[0], i);
+					if (isBlank(gridValues) == false) {
+						compareValues(positionValues, coordinates[0], i);
+					}
+
 				}
 
 			}
 
-		}
-
-		if (isEmpty(positionValues) == false) {
-			if (finalVerify(positionValues, position) == true) {
-				setValues(positionValues, position);
-				if (isFinal(positionValues) == true) {
-					setMaster(positionValues, position);
+			if (isEmpty(positionValues) == false) {
+				if (finalVerify(positionValues, position) == true) {
+					setValues(positionValues, position);
+					if (isFinal(positionValues) == true) {
+						setMaster(positionValues, position);
+					}
 				}
+
 			}
-
 		}
-
 	}
 
-	public static void checkColumn(int position) {
+	public static void checkColumn() {
 		// checks the row of the values
-		int[] gridValues = new int[9];
-		int[] positionValues = getValues(position);
+		for (int position = 1; position < 82; position++) {
+			int[] gridValues = new int[9];
+			int[] positionValues = getValues(position);
 
-		int[] coordinates = new int[2];
-		coordinates = getCoordinates(position);
-		int positionRow = coordinates[0];
+			int[] coordinates = new int[2];
+			coordinates = getCoordinates(position);
+			int positionRow = coordinates[0];
 
-		for (int i = 0; i < 9; i++) {
-			if (i != positionRow) {
-				gridValues = getGridValues(i, coordinates[1]);
+			for (int i = 0; i < 9; i++) {
+				if (i != positionRow) {
+					gridValues = getGridValues(i, coordinates[1]);
 
-				if (isBlank(gridValues) == false) {
-					compareValues(positionValues, i, coordinates[1]);
+					if (isBlank(gridValues) == false) {
+						compareValues(positionValues, i, coordinates[1]);
+					}
+
+				}
+
+			}
+
+			if (isEmpty(positionValues) == false) {
+				if (finalVerify(positionValues, position) == true) {
+					setValues(positionValues, position);
+					if (isFinal(positionValues) == true) {
+						setMaster(positionValues, position);
+					}
 				}
 
 			}
 
 		}
-
-		if (isEmpty(positionValues) == false) {
-			if (finalVerify(positionValues, position) == true) {
-				setValues(positionValues, position);
-				if (isFinal(positionValues) == true) {
-					setMaster(positionValues, position);
-				}
-			}
-
-		}
-
 	}
 
 	public static void getFailedRow(int[] master) {
@@ -1114,12 +1114,6 @@ public class SudokuStream {
 
 		}
 
-	}
-
-	public static void setRCSMasters(int row, int col, int position) {
-		setRowMaster(row);
-		setColMaster(col);
-		setSquareMaster(position);
 	}
 
 	public static void setColMaster(int col) {
