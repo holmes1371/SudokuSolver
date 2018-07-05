@@ -5,11 +5,9 @@ public class MasterSudoku {
 
 	public static long startTime = System.nanoTime();	
 	public static void main(String[] args) {
-		
-		
 		int[] localMaster = initLocalMaster();
 		
-		
+
 		localMaster = SudokuStream.solveIt(localMaster, 0, 0);
 		long endTime = System.nanoTime();
 		printLocalGrid(localMaster);
@@ -24,13 +22,15 @@ public class MasterSudoku {
 		
 		System.out.println();
 		printElapsedTime(endTime);
-		
+		System.out.println();
 	
-		System.exit(0);
+
+		
+				System.exit(0);
 	}
 	
 	
-	public static int[] initLocalMaster() {
+	private static int[] initLocalMaster() {
 		// initializes the masteranswer array with the imported template.
 		int[] importTemplate = FileImporter.readFile("excelTest.csv");
 		int[] returnTemplate = new int[82];
@@ -44,7 +44,7 @@ public class MasterSudoku {
 		return returnTemplate;
 
 	}
-	public static void printLocalGrid(int [] x) {
+	private static void printLocalGrid(int [] x) {
 		// prints the current state of the grid. Will show 0 if the position is
 		// unresolved (i.e. a value has not been committed to the masteranswer
 		// array for that position)
@@ -60,7 +60,7 @@ public class MasterSudoku {
 		}
 	}
 	
-	public static void printElapsedTime(long endTime)
+	private static void printElapsedTime(long endTime)
 	{
 		long elapsedMS = (endTime - startTime)/1000000;
 		
@@ -85,5 +85,13 @@ public class MasterSudoku {
 					System.out.printf("Time elapsed: %.0f:%.0f minutes", number, seconds);
 				}
 			}
+	}
+	
+	private static double getElapsedTime(long endTime)
+	{
+		long elapsedMS = (endTime - startTime)/1000000;
+		
+		return (double)elapsedMS/ (double)1000;
+		
 	}
 }
