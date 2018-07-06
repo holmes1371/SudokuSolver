@@ -7,7 +7,7 @@ public class SudokuStream {
 	private List<int[]> globalKey = new ArrayList<int[]>();
 	private int[][][] grid = new int[9][9][9];
 	private int[] masteranswer = new int[82];
-	private static int[] boxPosition = new int[6];
+	private int[] boxPosition = new int[6];
 	private int iterations = 0;
 	private List<Integer> rowMaster = new ArrayList<>();
 	private List<Integer> colMaster = new ArrayList<>();
@@ -153,7 +153,7 @@ public class SudokuStream {
 		return size;
 	}
 
-	private static int[] getCoordinates(int x) {
+	private int[] getCoordinates(int x) {
 		// given the grid position, returns the coordinates (row, col)
 		int pos = x;
 		int[] response = new int[3];
@@ -224,7 +224,7 @@ public class SudokuStream {
 
 	}
 
-	public static boolean checkConstraints(int[] master, int position, int value) {
+	public boolean checkConstraints(int[] master, int position, int value) {
 		// check row
 		int[] coordinates = new int[2];
 		coordinates = getCoordinates(position);
@@ -550,7 +550,7 @@ public class SudokuStream {
 		}
 	}
 
-	public static boolean mathCheck(int[] master) {
+	public boolean mathCheck(int[] master) {
 
 		int total;
 
@@ -735,7 +735,7 @@ public class SudokuStream {
 		return count == 0;
 	}
 
-	private static boolean isSame(int i, int j, int position) {
+	private boolean isSame(int i, int j, int position) {
 		// used for Square Check. Compares coordinates (i,j) to that of position
 		// (x,y)
 		int[] positionCoords = getCoordinates(position);
@@ -791,7 +791,7 @@ public class SudokuStream {
 		}
 	}
 
-	private static int getPosition(int row, int col) {
+	private int getPosition(int row, int col) {
 		// given coordinates (row, col) returns the grid position.
 		int pos = (9 * row) + (col + 1);
 		return pos;
@@ -825,7 +825,7 @@ public class SudokuStream {
 		return values;
 	}
 
-	private static void getBoxRow(int row) {
+	private void getBoxRow(int row) {
 		// given the row, will set boxPosition [0-2] with the rows that make up
 		// the corresponding square.
 		switch (row) {
@@ -854,7 +854,7 @@ public class SudokuStream {
 		}
 	}
 
-	private static void getBoxCol(int col) {
+	private void getBoxCol(int col) {
 		// given the col, will set boxPosition [3-5] with the columns that make
 		// up the corresponding square
 		switch (col) {
@@ -1122,7 +1122,7 @@ public class SudokuStream {
 		for (int i = 1; i < 82; i++) {
 			if (localMaster[i] != 0) {
 
-				if (!SudokuStream.checkConstraints(localMaster, i, localMaster[i])) {
+				if (!checkConstraints(localMaster, i, localMaster[i])) {
 					if (temp == 0) {
 						System.out.printf("%n---INPUT ERROR---%n");
 					}
@@ -1140,7 +1140,7 @@ public class SudokuStream {
 
 	public void endIt(int[] finished) {
 		long endTime = System.nanoTime();
-		if (SudokuStream.mathCheck(finished)) {
+		if (mathCheck(finished)) {
 			System.out.printf("%n%nPuzzle solved in %d iterations.", iterations - 1);
 		} else {
 			System.out.printf("%n%nAfter %d iterations no solution was found.%n", iterations - 1);
