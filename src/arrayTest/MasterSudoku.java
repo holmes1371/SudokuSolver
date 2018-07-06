@@ -8,7 +8,7 @@ public class MasterSudoku {
 		
 		SudokuStream game = new SudokuStream();
 		
-		int[] localMaster = game.initLocalMaster();
+		int[] localMaster = game.importTemplate();
 		game.errorCheck(localMaster);
 		
 		int[] finished = game.solver(localMaster);
