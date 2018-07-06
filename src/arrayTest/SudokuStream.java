@@ -8,7 +8,7 @@ public class SudokuStream {
 	private int[][][] grid = new int[9][9][9];
 	private int[] masteranswer = new int[82];
 	private static int[] boxPosition = new int[6];
-	public static int iterations = 0;
+	private int iterations = 0;
 	private List<Integer> rowMaster = new ArrayList<>();
 	private List<Integer> colMaster = new ArrayList<>();
 	private List<Integer> squareMaster = new ArrayList<>();
@@ -16,13 +16,12 @@ public class SudokuStream {
 	private int[] squareDesignations = { 11, 14, 17, 38, 41, 44, 65, 68, 80 };
 	private int keyCount = 0;
 
-	public SudokuStream(int[] master) {
-		this.masteranswer = master;
+	public SudokuStream() {
 
 	}
 
-	public int[] solver() {
-
+	public int[] solver(int[] master) {
+		this.masteranswer = master;
 		int[] solvedGame = solveIt(masteranswer, 0, 0);
 		return solvedGame;
 
@@ -188,11 +187,6 @@ public class SudokuStream {
 				values[master[i] - 1] = master[i];
 				setValues(values, i);
 			}
-			// else{
-			// int[] resetValues = {1,2,3,4,5,6,7,8,9};
-			// setValues(resetValues,i);
-			// }
-
 		}
 	}
 
@@ -214,7 +208,6 @@ public class SudokuStream {
 		checkColL2();
 		checkRowL2();
 		checkSquareL2();
-
 		checkColumn();
 		checkRow();
 		checkSquare();
@@ -415,6 +408,9 @@ public class SudokuStream {
 						for (int z = 0; z < 9; z++) {
 							if (!currentEliminated.contains(colMaster.get(z))) {
 								masteranswer[colMaster.get(z)] = i;
+								int[] x = new int[9];
+								x[i - 1] = i;
+								setValues(x, colMaster.get(z));
 							}
 						}
 					}
@@ -460,6 +456,9 @@ public class SudokuStream {
 						for (int z = 0; z < 9; z++) {
 							if (!currentEliminated.contains(rowMaster.get(z))) {
 								masteranswer[rowMaster.get(z)] = i;
+								int[] x = new int[9];
+								x[i - 1] = i;
+								setValues(x, rowMaster.get(z));
 							}
 						}
 					}
@@ -508,6 +507,9 @@ public class SudokuStream {
 						for (int z = 0; z < 9; z++) {
 							if (!currentEliminated.contains(squareMaster.get(z))) {
 								masteranswer[squareMaster.get(z)] = i;
+								int[] x = new int[9];
+								x[i - 1] = i;
+								setValues(x, squareMaster.get(z));
 							}
 						}
 					}
@@ -515,6 +517,20 @@ public class SudokuStream {
 			}
 		}
 		refreshGrid(masteranswer);
+	}
+
+	private void setValues(int[] x, int position) {
+		// values are written back to the grid after compareValues has been
+		// completed.
+		int[] coordinates = new int[2];
+		coordinates = getCoordinates(position);
+
+		int row = coordinates[0];
+		int column = coordinates[1];
+
+		for (int i = 0; i < 9; i++) {
+			grid[row][column][i] = x[i];
+		}
 	}
 
 	public void getFailedRow(int[] master) {
@@ -754,7 +770,7 @@ public class SudokuStream {
 		}
 	}
 
-	private void printGrid() {
+	public void printGrid() {
 		// prints the current state of the grid. Will show _ if the position is
 		// unresolved (i.e. a value has not been committed to the masteranswer
 		// array for that position)
@@ -863,20 +879,6 @@ public class SudokuStream {
 			boxPosition[4] = 7;
 			boxPosition[5] = 8;
 			break;
-		}
-	}
-
-	private void setValues(int[] x, int position) {
-		// values are written back to the grid after compareValues has been
-		// completed.
-		int[] coordinates = new int[2];
-		coordinates = getCoordinates(position);
-
-		int row = coordinates[0];
-		int column = coordinates[1];
-
-		for (int i = 0; i < 9; i++) {
-			grid[row][column][i] = x[i];
 		}
 	}
 
@@ -1049,7 +1051,7 @@ public class SudokuStream {
 		}
 	}
 
-	private static void printElapsedTime() {
+	private void printElapsedTime() {
 		if ((System.nanoTime() - MasterSudoku.startTime) / 1000000 < 1000)
 			System.out.println("Time elapsed: " + (System.nanoTime() - MasterSudoku.startTime) / 1000000 + " ms");
 
@@ -1075,4 +1077,76 @@ public class SudokuStream {
 
 	}
 
+	public void printElapsedTime(long endTime) {
+		long elapsedMS = (endTime - MasterSudoku.startTime) / 1000000;
+
+		if (elapsedMS < 1000)
+			System.out.println("Time elapsed: " + elapsedMS + " ms");
+
+		if (elapsedMS >= 1000 && elapsedMS < 60000) {
+			// long l = (System.nanoTime() - MasterSudoku.startTime) / 1000000;
+
+			double number = (double) elapsedMS / (double) 1000;
+
+			System.out.printf("Time elapsed: %.3f seconds %n", number);
+		}
+
+		if (elapsedMS >= 60000) {
+
+			double number = (double) elapsedMS / (double) 60000;
+			double seconds = (number - Math.floor(number)) * 60;
+			if (seconds <= 9.5) {
+				System.out.printf("Time elapsed: %.0f:0%.0f minutes", number, seconds);
+			} else {
+				System.out.printf("Time elapsed: %.0f:%.0f minutes", number, seconds);
+			}
+		}
+	}
+
+	public int[] initLocalMaster() {
+		// initializes the masteranswer array with the imported template.
+		int[] importTemplate = FileImporter.readFile("excelTest.csv");
+		int[] returnTemplate = new int[82];
+
+		for (int i = 0; i < 81; i++) {
+			if (importTemplate[i] != 0) {
+				returnTemplate[i + 1] = importTemplate[i];
+			}
+
+		}
+		return returnTemplate;
+	}
+
+	public void errorCheck(int[] localMaster) {
+		int temp = 0;
+		for (int i = 1; i < 82; i++) {
+			if (localMaster[i] != 0) {
+
+				if (!SudokuStream.checkConstraints(localMaster, i, localMaster[i])) {
+					if (temp == 0) {
+						System.out.printf("%n---INPUT ERROR---%n");
+					}
+					System.out.printf("%nCheck position %d for a discrepancy.", i);
+					temp++;
+
+				}
+
+			}
+
+		}
+		if (temp != 0)
+			System.exit(0);
+	}
+
+	public void endIt(int[] finished) {
+		long endTime = System.nanoTime();
+		if (SudokuStream.mathCheck(finished)) {
+			System.out.printf("%n%nPuzzle solved in %d iterations.", iterations - 1);
+		} else {
+			System.out.printf("%n%nAfter %d iterations no solution was found.%n", iterations - 1);
+		}
+		System.out.println();
+		printElapsedTime(endTime);
+		System.out.println();
+	}
 }
