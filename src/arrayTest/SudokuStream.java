@@ -4,25 +4,35 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SudokuStream {
-	private static List<int[]> globalKey = new ArrayList<int[]>();
-	private static int[][][] grid = new int[9][9][9];
-	private static int[] masteranswer = new int[82];
+	private List<int[]> globalKey = new ArrayList<int[]>();
+	private int[][][] grid = new int[9][9][9];
+	private int[] masteranswer = new int[82];
 	private static int[] boxPosition = new int[6];
 	public static int iterations = 0;
-	private static List<Integer> rowMaster = new ArrayList<>();
-	private static List<Integer> colMaster = new ArrayList<>();
-	private static List<Integer> squareMaster = new ArrayList<>();
-	private static List<Integer> eliminatedPositions = new ArrayList<>();
-	private static int[] squareDesignations = { 11, 14, 17, 38, 41, 44, 65, 68, 80 };
-	private static int keyCount = 0;
+	private List<Integer> rowMaster = new ArrayList<>();
+	private List<Integer> colMaster = new ArrayList<>();
+	private List<Integer> squareMaster = new ArrayList<>();
+	private List<Integer> eliminatedPositions = new ArrayList<>();
+	private int[] squareDesignations = { 11, 14, 17, 38, 41, 44, 65, 68, 80 };
+	private int keyCount = 0;
 
-	public static int[] solveIt(int[] master, int forcePosition, int forceValue) {
+	public SudokuStream(int[] master) {
+		this.masteranswer = master;
+
+	}
+
+	public int[] solver() {
+
+		int[] solvedGame = solveIt(masteranswer, 0, 0);
+		return solvedGame;
+
+	}
+
+	private int[] solveIt(int[] master, int forcePosition, int forceValue) {
 
 		if (forcePosition != 0) {
 			master[forcePosition] = forceValue;
 		}
-		
-		
 
 		initMaster(master);
 		initGrid(master);
@@ -75,7 +85,8 @@ public class SudokuStream {
 
 					// REAL STUFF STARTS HERE:
 					for (int i = 1; i < possibleValues.size(); i++) {
-						if (!checkConstraints(sandbox, nextEmpty, possibleValues.get(i))) return sandbox;
+						if (!checkConstraints(sandbox, nextEmpty, possibleValues.get(i)))
+							return sandbox;
 						subGame = solveIt(sandbox, nextEmpty, possibleValues.get(i));
 						if (mathCheck(subGame)) {
 							return subGame;
@@ -91,7 +102,7 @@ public class SudokuStream {
 
 	}
 
-	private static List<Integer> getPossibleValues(int[] masteranswer) {
+	private List<Integer> getPossibleValues(int[] masteranswer) {
 		List<Integer> returnValues = new ArrayList<>();
 		refreshGrid(masteranswer);
 		int nextZero = 0;
@@ -133,7 +144,7 @@ public class SudokuStream {
 		}
 	}
 
-	private static int howMany(int position) {
+	private int howMany(int position) {
 		int[] values = getValues(position);
 		int size = 0;
 		for (int i : values) {
@@ -170,7 +181,7 @@ public class SudokuStream {
 		return response;
 	}
 
-	private static void refreshGrid(int[] master) {
+	private void refreshGrid(int[] master) {
 		for (int i = 1; i < 82; i++) {
 			if (master[i] != 0) {
 				int[] values = new int[9];
@@ -185,7 +196,7 @@ public class SudokuStream {
 		}
 	}
 
-	private static void initGrid(int[] master) {
+	private void initGrid(int[] master) {
 		// initializes the grid with the imported template.
 		for (int row = 0; row < grid.length; row++) {
 			for (int col = 0; col < grid[row].length; col++) {
@@ -199,7 +210,7 @@ public class SudokuStream {
 		refreshGrid(master);
 	}
 
-	private static void solve() {
+	private void solve() {
 		checkColL2();
 		checkRowL2();
 		checkSquareL2();
@@ -210,7 +221,7 @@ public class SudokuStream {
 
 	}
 
-	private static int numberSolved(int[] keycheck) {
+	private int numberSolved(int[] keycheck) {
 		int count = 0;
 		for (int i = 1; i < 82; i++) {
 			if (keycheck[i] != 0)
@@ -222,49 +233,48 @@ public class SudokuStream {
 
 	public static boolean checkConstraints(int[] master, int position, int value) {
 		// check row
-				int[] coordinates = new int[2];
-				coordinates = getCoordinates(position);
-				int positionColumn = coordinates[1];
-				
+		int[] coordinates = new int[2];
+		coordinates = getCoordinates(position);
+		int positionColumn = coordinates[1];
 
-				for (int i = 0; i < 9; i++) {
-					if (i != positionColumn) {
+		for (int i = 0; i < 9; i++) {
+			if (i != positionColumn) {
 
-						if (value == master[getPosition(coordinates[0], i)]) {
-							return false;
-						}
-					}
+				if (value == master[getPosition(coordinates[0], i)]) {
+					return false;
 				}
+			}
+		}
 
-				// check column
-				int positionRow = coordinates[0];
-				for (int i = 0; i < 9; i++) {
-					if (i != positionRow) {
-						if (value == master[getPosition(i, coordinates[1])]) {
-							return false;
-						}
-					}
+		// check column
+		int positionRow = coordinates[0];
+		for (int i = 0; i < 9; i++) {
+			if (i != positionRow) {
+				if (value == master[getPosition(i, coordinates[1])]) {
+					return false;
 				}
+			}
+		}
 
-				// check square
-				getBoxRow(coordinates[0]);
-				getBoxCol(coordinates[1]);
+		// check square
+		getBoxRow(coordinates[0]);
+		getBoxCol(coordinates[1]);
 
-				for (int i = 0; i < 3; i++) {
-					for (int j = 3; j < 6; j++) {
-						if (!isSame(boxPosition[i], boxPosition[j], position)) {
-							if (value == master[getPosition(boxPosition[i], boxPosition[j])]) {
-								return false;
-							}
-
-						}
+		for (int i = 0; i < 3; i++) {
+			for (int j = 3; j < 6; j++) {
+				if (!isSame(boxPosition[i], boxPosition[j], position)) {
+					if (value == master[getPosition(boxPosition[i], boxPosition[j])]) {
+						return false;
 					}
-				}
 
-				return true;
+				}
+			}
+		}
+
+		return true;
 	}
 
-	private static void checkSquare() {
+	private void checkSquare() {
 		// checks the surrounding square for the position.
 		for (int position = 1; position < 82; position++) {
 
@@ -300,7 +310,7 @@ public class SudokuStream {
 
 	}
 
-	private static void checkColumn() {
+	private void checkColumn() {
 		// checks the row of the values
 		for (int position = 1; position < 82; position++) {
 			int[] positionValues = getValues(position);
@@ -333,7 +343,7 @@ public class SudokuStream {
 		}
 	}
 
-	private static void checkRow() {
+	private void checkRow() {
 		// checks the row of the values
 		for (int position = 1; position < 82; position++) {
 			int[] positionValues = getValues(position);
@@ -367,7 +377,7 @@ public class SudokuStream {
 
 	// LEVEL 2 LOGIC
 
-	private static void checkColL2()
+	private void checkColL2()
 	// L2 for Col Key: 2
 	{
 		for (int thisCol = 0; thisCol < 9; thisCol++) {
@@ -414,7 +424,7 @@ public class SudokuStream {
 		refreshGrid(masteranswer);
 	}
 
-	private static void checkRowL2() {
+	private void checkRowL2() {
 		// L2 for Row key: 1
 		for (int thisrow = 0; thisrow < 9; thisrow++) {
 			setRowMaster(thisrow);
@@ -459,7 +469,7 @@ public class SudokuStream {
 		refreshGrid(masteranswer);
 	}
 
-	private static void checkSquareL2()
+	private void checkSquareL2()
 
 	// L2 for Square key: 3
 	{
@@ -507,7 +517,7 @@ public class SudokuStream {
 		refreshGrid(masteranswer);
 	}
 
-	public static void getFailedRow(int[] master) {
+	public void getFailedRow(int[] master) {
 		int total;
 
 		// verify row
@@ -580,7 +590,7 @@ public class SudokuStream {
 		return true;
 	}
 
-	private static boolean finalVerify(int[] x, int position) {
+	private boolean finalVerify(int[] x, int position) {
 		// triple verification before any answer is committed to the
 		// masteranswer array.
 		int attemptedValue = 0;
@@ -636,7 +646,7 @@ public class SudokuStream {
 		return true;
 	}
 
-	private static int verifyValue(int x) {
+	private int verifyValue(int x) {
 		// verifies that there is only one possible solution left in the grid
 		// before committing that solution to the masteranswer array
 		int[] rowcol = new int[2];
@@ -664,7 +674,7 @@ public class SudokuStream {
 		return answer;
 	}
 
-	private static void compareValues(int[] positionValues, int row, int col) {
+	private void compareValues(int[] positionValues, int row, int col) {
 		// compares the position values to the masteranswer array
 		int position = getPosition(row, col);
 		if (masteranswer[position] != 0) {
@@ -672,7 +682,7 @@ public class SudokuStream {
 		}
 	}
 
-	private static void refreshMaster() {
+	private void refreshMaster() {
 		// masteranswer array refresh by verifying positions within the grid
 		for (int i = 0; i < 82; i++) {
 			masteranswer[i] = verifyValue(i);
@@ -680,7 +690,7 @@ public class SudokuStream {
 		}
 	}
 
-	private static boolean isFinal(int[] positionValues) {
+	private boolean isFinal(int[] positionValues) {
 		// checks to see if there is only 1 possible solution left in the given
 		// position.
 		int count = 0;
@@ -695,7 +705,7 @@ public class SudokuStream {
 
 	}
 
-	private static boolean isBlank(int[] x) {
+	private boolean isBlank(int[] x) {
 		// checks a position to see if it is blank on the main grid. i.e. no (or
 		// all)
 		// possibilities have been eliminated
@@ -721,7 +731,7 @@ public class SudokuStream {
 		return positionCoords[0] == testCoords[0] && positionCoords[1] == testCoords[1];
 	}
 
-	private static boolean isEmpty(int[] x) {
+	private boolean isEmpty(int[] x) {
 		// checks to see if all possible values have been eliminated from a
 		// position.
 		int count = 0;
@@ -733,7 +743,7 @@ public class SudokuStream {
 		return count == 9;
 	}
 
-	private static void initMaster(int[] master) {
+	private void initMaster(int[] master) {
 		// initializes the masteranswer array with the imported template.
 		// int[] importTemplate = FileImporter.readFile("excelTest.csv");
 
@@ -744,7 +754,7 @@ public class SudokuStream {
 		}
 	}
 
-	private static void printGrid() {
+	private void printGrid() {
 		// prints the current state of the grid. Will show _ if the position is
 		// unresolved (i.e. a value has not been committed to the masteranswer
 		// array for that position)
@@ -771,7 +781,7 @@ public class SudokuStream {
 		return pos;
 	}
 
-	private static int[] getGridValues(int row, int column) {
+	private int[] getGridValues(int row, int column) {
 		// given the coordinates (row, col) returns possible values stored in
 		// that position.
 		int[] gridValues = new int[9];
@@ -782,7 +792,7 @@ public class SudokuStream {
 		return gridValues;
 	}
 
-	private static int[] getValues(int position) {
+	private int[] getValues(int position) {
 		// given the grid position, returns the possible values stored in the
 		// grid.
 		int[] coordinates = new int[2];
@@ -856,7 +866,7 @@ public class SudokuStream {
 		}
 	}
 
-	private static void setValues(int[] x, int position) {
+	private void setValues(int[] x, int position) {
 		// values are written back to the grid after compareValues has been
 		// completed.
 		int[] coordinates = new int[2];
@@ -870,7 +880,7 @@ public class SudokuStream {
 		}
 	}
 
-	private static void setMaster(int[] positionValues, int position) {
+	private void setMaster(int[] positionValues, int position) {
 		// setter for masteranswer array
 		for (int i = 0; i < 9; i++) {
 			setValues(positionValues, position);
@@ -882,7 +892,7 @@ public class SudokuStream {
 
 	// LEVEL 2 LOGIC
 
-	private static List<Integer> getCurrentSquareValues(int position) {
+	private List<Integer> getCurrentSquareValues(int position) {
 		List<Integer> returnSquareValues = new ArrayList<>();
 		setSquareMaster(position);
 		for (int i = 0; i < 9; i++) {
@@ -893,7 +903,7 @@ public class SudokuStream {
 		return returnSquareValues;
 	}
 
-	private static List<Integer> getCurrentColValues(int position) {
+	private List<Integer> getCurrentColValues(int position) {
 		List<Integer> returnColValues = new ArrayList<>();
 		setColMaster(getCoordinates(position)[1]);
 		for (int i = 0; i < 9; i++) {
@@ -903,7 +913,7 @@ public class SudokuStream {
 		return returnColValues;
 	}
 
-	private static List<Integer> getCurrentRowValues(int position) {
+	private List<Integer> getCurrentRowValues(int position) {
 		List<Integer> returnRowValues = new ArrayList<>();
 		setRowMaster(getCoordinates(position)[0]);
 		for (int i = 0; i < 9; i++) {
@@ -913,7 +923,7 @@ public class SudokuStream {
 		return returnRowValues;
 	}
 
-	private static List<Integer> getUsedValues(int rowcolSquare) {
+	private List<Integer> getUsedValues(int rowcolSquare) {
 		List<Integer> usedValues = new ArrayList<>();
 
 		switch (rowcolSquare) {
@@ -945,14 +955,14 @@ public class SudokuStream {
 		return usedValues;
 	}
 
-	private static void setRowMaster(int row) {
+	private void setRowMaster(int row) {
 		rowMaster.clear();
 		for (int i = 0; i < 9; i++) {
 			rowMaster.add(getPosition(row, i));
 		}
 	}
 
-	private static List<Integer> getCurrentPossible(int rowcolSquare) {
+	private List<Integer> getCurrentPossible(int rowcolSquare) {
 		List<Integer> x = new ArrayList<>();
 
 		switch (rowcolSquare) {
@@ -984,7 +994,7 @@ public class SudokuStream {
 		return x;
 	}
 
-	private static void setEliminatedPositions(int rowcolSquare) {
+	private void setEliminatedPositions(int rowcolSquare) {
 		eliminatedPositions.clear();
 
 		switch (rowcolSquare) {
@@ -1017,7 +1027,7 @@ public class SudokuStream {
 		}
 	}
 
-	private static void setColMaster(int col) {
+	private void setColMaster(int col) {
 
 		colMaster.clear();
 		for (int i = 0; i < 9; i++) {
@@ -1025,7 +1035,7 @@ public class SudokuStream {
 		}
 	}
 
-	private static void setSquareMaster(int position) {
+	private void setSquareMaster(int position) {
 		int row = getCoordinates(position)[0];
 		int col = getCoordinates(position)[1];
 		getBoxRow(row);
