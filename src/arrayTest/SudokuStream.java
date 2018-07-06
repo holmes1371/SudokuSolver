@@ -1103,7 +1103,7 @@ public class SudokuStream {
 		}
 	}
 
-	public int[] initLocalMaster() {
+	public int[] importTemplate() {
 		// initializes the masteranswer array with the imported template.
 		int[] importTemplate = FileImporter.readFile("excelTest.csv");
 		int[] returnTemplate = new int[82];
