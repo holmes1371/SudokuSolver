@@ -220,46 +220,48 @@ public class SudokuStream {
 
 	}
 
-	private static boolean checkConstraints(int[] master, int position, int value) {
+	public static boolean checkConstraints(int[] master, int position, int value) {
 		// check row
-		int[] coordinates = new int[2];
-		coordinates = getCoordinates(position);
-		int positionColumn = coordinates[1];
+				int[] coordinates = new int[2];
+				coordinates = getCoordinates(position);
+				int positionColumn = coordinates[1];
+				
 
-		for (int i = 0; i < 9; i++) {
-			if (i != positionColumn) {
-				if (value == master[getPosition(coordinates[0], i)]) {
-					return false;
-				}
-			}
-		}
+				for (int i = 0; i < 9; i++) {
+					if (i != positionColumn) {
 
-		// check column
-		int positionRow = coordinates[0];
-		for (int i = 0; i < 9; i++) {
-			if (i != positionRow) {
-				if (value == master[getPosition(i, coordinates[1])]) {
-					return false;
-				}
-			}
-		}
-
-		// check square
-		getBoxRow(coordinates[0]);
-		getBoxCol(coordinates[1]);
-
-		for (int i = 0; i < 3; i++) {
-			for (int j = 3; j < 6; j++) {
-				if (!isSame(i, j, position)) {
-					if (value == master[getPosition(boxPosition[i], boxPosition[j])]) {
-						return false;
+						if (value == master[getPosition(coordinates[0], i)]) {
+							return false;
+						}
 					}
-
 				}
-			}
-		}
 
-		return true;
+				// check column
+				int positionRow = coordinates[0];
+				for (int i = 0; i < 9; i++) {
+					if (i != positionRow) {
+						if (value == master[getPosition(i, coordinates[1])]) {
+							return false;
+						}
+					}
+				}
+
+				// check square
+				getBoxRow(coordinates[0]);
+				getBoxCol(coordinates[1]);
+
+				for (int i = 0; i < 3; i++) {
+					for (int j = 3; j < 6; j++) {
+						if (!isSame(boxPosition[i], boxPosition[j], position)) {
+							if (value == master[getPosition(boxPosition[i], boxPosition[j])]) {
+								return false;
+							}
+
+						}
+					}
+				}
+
+				return true;
 	}
 
 	private static void checkSquare() {
@@ -275,7 +277,7 @@ public class SudokuStream {
 
 			for (int i = 0; i < 3; i++) {
 				for (int j = 3; j < 6; j++) {
-					if (!isSame(i, j, position)) {
+					if (!isSame(boxPosition[i], boxPosition[j], position)) {
 						int[] gridValues = getGridValues(boxPosition[i], boxPosition[j]);
 						if (!isBlank(gridValues)) {
 							compareValues(positionValues, boxPosition[i], boxPosition[j]);
