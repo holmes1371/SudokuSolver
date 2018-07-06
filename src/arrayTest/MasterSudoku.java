@@ -8,16 +8,18 @@ public class MasterSudoku {
 		int[] localMaster = initLocalMaster();
 
 		errorCheck(localMaster);
-
-		localMaster = SudokuStream.solveIt(localMaster, 0, 0);
-		long endTime = System.nanoTime();
 		printLocalGrid(localMaster);
 
+		SudokuStream game = new SudokuStream(localMaster);
+
+		localMaster = game.solver();
+
+		long endTime = System.nanoTime();
+		printLocalGrid(localMaster);
 		if (SudokuStream.mathCheck(localMaster)) {
 			System.out.printf("%n%nPuzzle solved in %d iterations.", SudokuStream.iterations - 1);
 		} else {
 			System.out.printf("%n%nAfter %d iterations no solution was found.%n", SudokuStream.iterations - 1);
-			SudokuStream.getFailedRow(localMaster);
 		}
 
 		System.out.println();
@@ -44,7 +46,8 @@ public class MasterSudoku {
 			}
 
 		}
-		if (temp != 0)System.exit(0);
+		if (temp != 0)
+			System.exit(0);
 	}
 
 	private static int[] initLocalMaster() {
@@ -104,7 +107,7 @@ public class MasterSudoku {
 		}
 	}
 
-	private static double getElapsedTime(long endTime) {
+	private double getElapsedTime(long endTime) {
 		long elapsedMS = (endTime - startTime) / 1000000;
 
 		return (double) elapsedMS / (double) 1000;
