@@ -17,7 +17,6 @@ public class SudokuStream {
 	private int keyCount = 0;
 
 	public SudokuStream() {
-
 	}
 
 	public int[] solver(int[] master) {
@@ -224,7 +223,7 @@ public class SudokuStream {
 
 	}
 
-	public boolean checkConstraints(int[] master, int position, int value) {
+	private boolean checkConstraints(int[] master, int position, int value) {
 		// check row
 		int[] coordinates = new int[2];
 		coordinates = getCoordinates(position);
@@ -533,24 +532,7 @@ public class SudokuStream {
 		}
 	}
 
-	public void getFailedRow(int[] master) {
-		int total;
-
-		// verify row
-		for (int i = 0; i < 9; i++) {
-			total = 0;
-			for (int j = 0; j < 9; j++) {
-				total += master[getPosition(i, j)];
-			}
-			if (total != 45) {
-				System.out.printf("%nRow %d failed math verification..%n", i);
-
-			}
-
-		}
-	}
-
-	public boolean mathCheck(int[] master) {
+	private boolean mathCheck(int[] master) {
 
 		int total;
 
@@ -766,27 +748,6 @@ public class SudokuStream {
 		for (int i = 1; i < 82; i++) {
 			if (master[i] != 0) {
 				masteranswer[i] = master[i];
-			}
-		}
-	}
-
-	public void printGrid() {
-		// prints the current state of the grid. Will show _ if the position is
-		// unresolved (i.e. a value has not been committed to the masteranswer
-		// array for that position)
-		System.out.printf("%n%n\t0\t1\t2\t3\t4\t5\t6\t7\t8%n");
-		System.out.println("----------------------------------------------------------------------------");
-		int position = 1;
-		for (int i = 0; i < 9; i++) {
-			System.out.printf("%n%d   |", i);
-			for (int j = 0; j < 9; j++) {
-				if (masteranswer[position] == 0) {
-					System.out.printf("\t_");
-					position++;
-				} else {
-					System.out.printf("\t%d", masteranswer[position]);
-					position++;
-				}
 			}
 		}
 	}
@@ -1077,7 +1038,7 @@ public class SudokuStream {
 
 	}
 
-	public void printElapsedTime(long endTime) {
+	private void printElapsedTime(long endTime) {
 		long elapsedMS = (endTime - MasterSudoku.startTime) / 1000000;
 
 		if (elapsedMS < 1000)
@@ -1099,6 +1060,27 @@ public class SudokuStream {
 				System.out.printf("Time elapsed: %.0f:0%.0f minutes", number, seconds);
 			} else {
 				System.out.printf("Time elapsed: %.0f:%.0f minutes", number, seconds);
+			}
+		}
+	}
+
+	public void printGrid() {
+		// prints the current state of the grid. Will show _ if the position is
+		// unresolved (i.e. a value has not been committed to the masteranswer
+		// array for that position)
+		System.out.printf("%n%n\t0\t1\t2\t3\t4\t5\t6\t7\t8%n");
+		System.out.println("----------------------------------------------------------------------------");
+		int position = 1;
+		for (int i = 0; i < 9; i++) {
+			System.out.printf("%n%d   |", i);
+			for (int j = 0; j < 9; j++) {
+				if (masteranswer[position] == 0) {
+					System.out.printf("\t_");
+					position++;
+				} else {
+					System.out.printf("\t%d", masteranswer[position]);
+					position++;
+				}
 			}
 		}
 	}
