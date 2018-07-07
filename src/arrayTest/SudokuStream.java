@@ -18,10 +18,11 @@ public class SudokuStream {
 	private int keyCount = 0;
 
 	public SudokuStream() {
+		this.masteranswer = importTemplate();
 	}
 
 	public void solve() {
-		this.masteranswer = importTemplate();
+		
 		errorCheck(masteranswer);
 		int[] solvedGame = solveIt(masteranswer, 0, 0);
 		printGrid();
