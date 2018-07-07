@@ -19,11 +19,10 @@ public class SudokuStream {
 
 	public SudokuStream() {
 		this.masteranswer = importTemplate();
+		errorCheck(masteranswer);
 	}
 
 	public void solve() {
-		
-		errorCheck(masteranswer);
 		int[] solvedGame = solveIt(masteranswer, 0, 0);
 		printGrid();
 		endIt(solvedGame);
