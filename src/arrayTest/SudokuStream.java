@@ -1,10 +1,10 @@
-package arrayTest;
+package SudokuSolver;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class SudokuStream {
+public class Solver {
 	private List<int[]> globalKey = new ArrayList<int[]>();
 	private int[][][] grid = new int[9][9][9];
 	private int[] masteranswer = new int[82];
@@ -17,7 +17,7 @@ public class SudokuStream {
 	private int[] squareDesignations = { 11, 14, 17, 38, 41, 44, 65, 68, 80 };
 	private int keyCount = 0;
 
-	public SudokuStream() {
+	public Solver() {
 		this.masteranswer = importTemplate();
 		errorCheck(masteranswer);
 	}
