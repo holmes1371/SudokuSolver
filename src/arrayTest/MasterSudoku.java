@@ -1,4 +1,4 @@
-package arrayTest;
+package SudokuSolver;
 
 public class MasterSudoku {
 
@@ -6,7 +6,7 @@ public class MasterSudoku {
 
 	public static void main(String[] args) {
 		
-		SudokuStream game = new SudokuStream();
+		Solver game = new Solver();
 		
 		game.solve();
 		
