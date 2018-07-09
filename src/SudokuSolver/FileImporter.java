@@ -1,4 +1,4 @@
-package arrayTest;
+package SudokuSolver;
 
 import java.io.BufferedInputStream;
 import java.io.DataInputStream;
@@ -9,9 +9,9 @@ import java.io.IOException;
 
 public class FileImporter {
 
-	public static int[] template = new int[81];
-	public static String inputTemp;
-	public static String[] convert = new String[81];
+	private static int[] template = new int[81];
+	private static String inputTemp;
+	private static String[] convert = new String[81];
 	@SuppressWarnings("deprecation")
 
 		
