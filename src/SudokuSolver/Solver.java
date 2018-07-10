@@ -16,6 +16,7 @@ public class Solver {
 	private List<Integer> eliminatedPositions = new ArrayList<>();
 	private int[] squareDesignations = { 11, 14, 17, 38, 41, 44, 65, 68, 80 };
 	private int keyCount = 0;
+	private int dontPrint = 0;
 
 	public Solver() {
 		this.masteranswer = importTemplate();
@@ -26,6 +27,14 @@ public class Solver {
 		int[] solvedGame = solveIt(masteranswer, 0, 0);
 		printGrid();
 		endIt(solvedGame);
+	}
+
+	public int[] solve(int[] generate) {
+		dontPrint = 1;
+		int[] solvedGame = solveIt(generate, 0, 0);
+		printGrid();
+		endIt(solvedGame);
+		return solvedGame;
 	}
 
 	private int[] solveIt(int[] master, int forcePosition, int forceValue) {
@@ -43,14 +52,18 @@ public class Solver {
 			int beforeSolved = numberSolved(masteranswer);
 			solver();
 			refreshMaster();
-			printGrid();
 			iterations++;
-			System.out.println();
-			System.out.println();
-			System.out.println("Iterations: " + iterations);
-			// System.out.printf("Solved: %d%n", numberSolved(masteranswer));
-			printElapsedTime();
-			System.out.println();
+
+			if (dontPrint == 0) {
+				printGrid();
+				System.out.println();
+				System.out.println();
+				System.out.println("Iterations: " + iterations);
+				// System.out.printf("Solved: %d%n",
+				// numberSolved(masteranswer));
+				printElapsedTime();
+				System.out.println();
+			}
 
 			if (beforeSolved == numberSolved(masteranswer)) {
 				List<Integer> possibleValues = getPossibleValues(masteranswer);
@@ -977,12 +990,12 @@ public class Solver {
 		// prints the current state of the grid. Will show _ if the position is
 		// unresolved (i.e. a value has not been committed to the masteranswer
 		// array for that position)
-		System.out.printf("%n%n\t0\t1\t2\t3\t4\t5\t6\t7\t8%n");
+		System.out.printf("%n%n\t1\t2\t3\t4\t5\t6\t7\t8\t9%n");
 		System.out.println("----------------------------------------------------------------------------");
 		int position = 1;
-		for (int i = 0; i < 9; i++) {
+		for (int i = 1; i < 10; i++) {
 			System.out.printf("%n%d   |", i);
-			for (int j = 0; j < 9; j++) {
+			for (int j = 1; j < 10; j++) {
 				if (masteranswer[position] == 0) {
 					System.out.printf("\t_");
 					position++;
@@ -1026,13 +1039,15 @@ public class Solver {
 
 	private void endIt(int[] finished) {
 		long endTime = System.nanoTime();
-		if (mathCheck(finished)) {
-			System.out.printf("%n%nPuzzle solved in %d iterations.", iterations - 1);
-		} else {
-			System.out.printf("%n%nAfter %d iterations no solution was found.%n", iterations - 1);
+		if (dontPrint == 0) {
+			if (mathCheck(finished)) {
+				System.out.printf("%n%nPuzzle solved in %d iterations.", iterations - 1);
+			} else {
+				System.out.printf("%n%nAfter %d iterations no solution was found.%n", iterations - 1);
+			}
+			System.out.println();
+			printElapsedTime(endTime);
+			System.out.println();
 		}
-		System.out.println();
-		printElapsedTime(endTime);
-		System.out.println();
 	}
 }
