@@ -9,6 +9,13 @@ public class Sandbox2 {
 
 	public static void main(String[] args) {
 
+		/*
+		 * Difficulty:
+		 * 1 - Easy
+		 * 2 - Medium
+		 * 3 - Hard
+		 */
+		
 		PuzzleGen newPuzz = new PuzzleGen(3);
 		
 		int[] testPuzz = newPuzz.generate();
