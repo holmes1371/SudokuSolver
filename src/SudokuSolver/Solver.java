@@ -3,6 +3,7 @@ package SudokuSolver;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 public class Solver {
 	private List<int[]> globalKey = new ArrayList<int[]>();
@@ -16,11 +17,17 @@ public class Solver {
 	private List<Integer> eliminatedPositions = new ArrayList<>();
 	private int[] squareDesignations = { 11, 14, 17, 38, 41, 44, 65, 68, 80 };
 	private int keyCount = 0;
-	private int dontPrint = 0;
+	private boolean creator = false;
+	private int endIt;
+	public static int[] test = new int[82];
 
 	public Solver() {
 		this.masteranswer = importTemplate();
 		errorCheck(masteranswer);
+	}
+	public Solver(int[] master){
+		this.masteranswer = master;
+		errorCheck(master);
 	}
 
 	public void solve() {
@@ -30,10 +37,10 @@ public class Solver {
 	}
 
 	public int[] solve(int[] generate) {
-		dontPrint = 1;
+		creator = true;
+		endIt = 0;
 		int[] solvedGame = solveIt(generate, 0, 0);
-		printGrid();
-		endIt(solvedGame);
+		//printGrid();
 		return solvedGame;
 	}
 
@@ -54,7 +61,7 @@ public class Solver {
 			refreshMaster();
 			iterations++;
 
-			if (dontPrint == 0) {
+			if (!creator) {
 				printGrid();
 				System.out.println();
 				System.out.println();
@@ -65,6 +72,8 @@ public class Solver {
 				System.out.println();
 			}
 
+			if (endIt == 1)
+				return masteranswer;
 			if (beforeSolved == numberSolved(masteranswer)) {
 				List<Integer> possibleValues = getPossibleValues(masteranswer);
 				int[] y = Arrays.copyOf(masteranswer, 82);
@@ -87,6 +96,12 @@ public class Solver {
 					int[] sandbox = globalKey.get(keyCount);
 
 					int[] subGame = new int[82];
+					if (creator && iterations >= 125) {
+						endIt = 1;
+						System.out.printf("%nIterations: %d%n", iterations);
+						iterations = 0;
+						return masteranswer;
+					}
 
 					for (int i = 1; i < possibleValues.size(); i++) {
 						if (!checkConstraints(sandbox, nextEmpty, possibleValues.get(i)))
@@ -108,22 +123,30 @@ public class Solver {
 
 	private List<Integer> getPossibleValues(int[] masteranswer) {
 		List<Integer> returnValues = new ArrayList<>();
+		List<Integer> openPositions = new ArrayList<>();
 		refreshGrid(masteranswer);
+		Random rand = new Random();
 		int nextZero = 0;
 
 		int smallest = 9;
 
 		for (int i = 1; i < 82; i++) {
 			if (masteranswer[i] == 0) {
-				int size = howMany(i);
-				if (size < smallest) {
-					nextZero = i;
-					smallest = size;
-					break;
+				if (creator) {
+					openPositions.add(i);
+					nextZero = openPositions.get(rand.nextInt(((openPositions.size()-1) +1)));
+				} else {
+					int size = howMany(i);
+					if (size < smallest) {
+						nextZero = i;
+						smallest = size;
+						break;
+					}
 				}
-			}
 
+			}
 		}
+
 		if (nextZero == 0) {
 			returnValues.clear();
 			return returnValues;
@@ -505,7 +528,7 @@ public class Solver {
 		}
 	}
 
-	private boolean mathCheck(int[] master) {
+	public boolean mathCheck(int[] master) {
 
 		int total;
 
@@ -1037,9 +1060,21 @@ public class Solver {
 			System.exit(0);
 	}
 
+	public boolean errorCheck2(int[] localMaster) {
+
+		for (int i = 1; i < 82; i++) {
+			if (localMaster[i] != 0) {
+				if (!checkConstraints(localMaster, i, localMaster[i])) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+
 	private void endIt(int[] finished) {
 		long endTime = System.nanoTime();
-		if (dontPrint == 0) {
+		if (!creator) {
 			if (mathCheck(finished)) {
 				System.out.printf("%n%nPuzzle solved in %d iterations.", iterations - 1);
 			} else {
