@@ -16,7 +16,7 @@ public class Sandbox2 {
 		 * 3 - Hard
 		 */
 		
-		PuzzleGen newPuzz = new PuzzleGen(3);
+		PuzzleGen newPuzz = new PuzzleGen(2);
 		
 		int[] testPuzz = newPuzz.generate();
 		
