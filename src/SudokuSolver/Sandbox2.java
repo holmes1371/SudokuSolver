@@ -20,6 +20,10 @@ public class Sandbox2 {
 		
 		int[] testPuzz = newPuzz.generate();
 		
+		
+		
+		Solver game = new Solver(testPuzz);
+		game.solve();
 		printGrid(testPuzz);
 		
 		System.exit(0);
@@ -30,6 +34,7 @@ public class Sandbox2 {
 		// prints the current state of the grid. Will show _ if the position is
 		// unresolved (i.e. a value has not been committed to the masteranswer
 		// array for that position)
+		System.out.print("TEST PUZZLE:");
 		System.out.printf("%n%n\t1\t2\t3\t4\t5\t6\t7\t8\t9%n");
 		System.out.println("----------------------------------------------------------------------------");
 		int position = 1;
@@ -45,5 +50,6 @@ public class Sandbox2 {
 				}
 			}
 		}
+		System.out.printf("%n%n");
 	}
 }
