@@ -9,6 +9,7 @@ public class PuzzleGen {
 	private Solver newbie = new Solver();
 	private Random rand = new Random();
 	private int difficulty;
+	
 
 	public PuzzleGen(int x) {
 		this.difficulty = x;
@@ -21,29 +22,30 @@ public class PuzzleGen {
 			returnPuzz = newbie.solve(returnPuzz);
 			// System.out.println(newbie.mathCheck(returnPuzz));
 			if (newbie.mathCheck(returnPuzz))
-				break;
+					break;
 		}
 		
 		returnPuzz = removeIt(returnPuzz);
 		return returnPuzz;
 		
 	}
+	
 
 	private int[] removeIt(int[] returnPuzz) {
 		List<Integer> randomPositions = new ArrayList<>();
 		int x = 0;
 		switch (difficulty) {
-		// easy - 40
+		// easy - 40 to 50
 		case 1:
-			x = 45;
+			x = randomizeIt(50, 40);		
 			break;
-		// medium - 50
+		// medium - 50 to 60
 		case 2:
-			x = 55;
+			x = randomizeIt(60, 50);
 			break;
-		// hard - 60
+		// hard - 60 to 70
 		case 3:
-			x = 65;
+			x = randomizeIt(70, 60);
 			break;
 		}
 		for (int i = 0; i < x;) {
@@ -59,6 +61,12 @@ public class PuzzleGen {
 		return returnPuzz;
 	}
 
+	private int randomizeIt(int max, int min)
+	{
+		int x = rand.nextInt((max - min) + 1) + min;
+		return x;
+	}
+	
 	private int[] makeIt() {
 		int[] generate = new int[82];
 		while (true) {
