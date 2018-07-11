@@ -25,7 +25,6 @@ public class Sandbox2 {
 		Solver game = new Solver(testPuzz);
 		game.solve();
 		printGrid(testPuzz);
-		
 		System.exit(0);
 		
 		
