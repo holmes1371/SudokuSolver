@@ -16,11 +16,11 @@ public class Sandbox2 {
 		 * 3 - Hard
 		 */
 		
-		PuzzleGen newPuzz = new PuzzleGen(2);
+		PuzzleGen newPuzz = new PuzzleGen(3);
 		
 		int[] testPuzz = newPuzz.generate();
 		
-		//this is a pull test. 
+	
 		
 		Solver game = new Solver(testPuzz);
 		game.solve();
