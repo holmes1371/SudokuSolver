@@ -43,9 +43,9 @@ public class PuzzleGen {
 		case 2:
 			x = randomizeIt(60, 50);
 			break;
-		// hard - 60 to 70
+		// hard - 60 to 65
 		case 3:
-			x = randomizeIt(70, 60);
+			x = randomizeIt(65, 60);
 			break;
 		}
 		for (int i = 0; i < x;) {
