@@ -1,5 +1,6 @@
 package SudokuSolver;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -9,6 +10,7 @@ public class Solver {
 	private List<int[]> globalKey = new ArrayList<int[]>();
 	private int[][][] grid = new int[9][9][9];
 	private int[] masteranswer = new int[82];
+	private int [] initialPuzzle = new int[82]; 
 	private int[] boxPosition = new int[6];
 	private int iterations = 0;
 	private List<Integer> rowMaster = new ArrayList<>();
@@ -18,7 +20,7 @@ public class Solver {
 	private int[] squareDesignations = { 11, 14, 17, 38, 41, 44, 65, 68, 80 };
 	private int keyCount = 0;
 	private boolean creator = false;
-	private int endIt;
+	private int endIt;	
 	public static int[] test = new int[82];
 
 	public Solver() {
@@ -27,6 +29,7 @@ public class Solver {
 	}
 	public Solver(int[] master){
 		this.masteranswer = master;
+		this.initialPuzzle = master;
 		errorCheck(master);
 	}
 
@@ -36,11 +39,11 @@ public class Solver {
 		endIt(solvedGame);
 	}
 
-	public int[] solve(int[] generate) {
+	public int[] solve(int [] generate) {
 		creator = true;
+		this.initialPuzzle = generate;
 		endIt = 0;
 		int[] solvedGame = solveIt(generate, 0, 0);
-		//printGrid();
 		return solvedGame;
 	}
 
@@ -101,6 +104,15 @@ public class Solver {
 						System.out.printf("%nIterations: %d%n", iterations);
 						iterations = 0;
 						return masteranswer;
+					}
+					
+					//ultimate bailout: 
+					if (iterations >= 500000)
+					{
+						endIt = 1;
+						System.out.printf("%nIterations: %d%n", iterations);
+						return initialPuzzle;
+						
 					}
 
 					for (int i = 1; i < possibleValues.size(); i++) {
